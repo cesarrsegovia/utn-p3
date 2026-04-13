@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/biblioteca.js"></script>
+    <title>Biblioteca - Préstamo de Libros</title>
+</head>
+<body>
+    <h1>Préstamo de Libros</h1>
+    <table border="2">
+        <tr>
+            <td>Libro:</td>
+            <td>
+                <select id="libro">
+                    <option value="">Seleccione un libro</option>
+                    <option value="Divergente">Divergente</option>
+                    <option value="Frozen">Frozen</option>
+                    <option value="Sirenas">Sirenas</option>
+                    <option value="Insurgente">Insurgente</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Situación:</td>
+            <td><input type="text" id="situacion" readonly></td>
+        </tr>
+        <tr>
+            <td>Fecha de Devolución:</td>
+            <td><input type="text" id="fechaDevolucion" readonly></td>
+        </tr>
+    </table>
+    <div style="margin-top: 10px;">
+        <button id="btnPrestamo">Préstamo</button>
+        <button id="btnReset">Resetear</button>
+    </div>
+</body>
+</html>

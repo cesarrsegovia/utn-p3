@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/comercio.js"></script>
+    <title>Comercio - Venta de Artículos</title>
+</head>
+<body>
+    <h1>Venta de Artículos</h1>
+    <table border="2">
+        <tr>
+            <th>Artículo</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Subtotal</th>
+        </tr>
+        <tr>
+            <td>
+                <select class="articulo" id="articulo1">
+                    <option value="">Seleccione</option>
+                    <option value="30000">Notebook Vaio Intel Core I3</option>
+                    <option value="45000">Notebook Lenovo Intel Core I7</option>
+                    <option value="50000">Notebook Compaq Intel Core I7</option>
+                    <option value="9000">Notebook RCA Intel Core I3</option>
+                    <option value="45000">Notebook Positivo BGH Core I7</option>
+                    <option value="5400">Impresora Multifunción HP</option>
+                    <option value="6700">Tablet Philco Intel 16 GB</option>
+                    <option value="4400">Tablet Huawei 16 GB</option>
+                </select>
+            </td>
+            <td><input type="number" class="cantidad" id="cantidad1" min="1"></td>
+            <td><input type="text" class="precioUnitario" id="precioUnitario1" readonly></td>
+            <td><input type="text" class="subtotal" id="subtotal1" readonly></td>
+        </tr>
+        <tr>
+            <td>
+                <select class="articulo" id="articulo2">
+                    <option value="">Seleccione</option>
+                    <option value="30000">Notebook Vaio Intel Core I3</option>
+                    <option value="45000">Notebook Lenovo Intel Core I7</option>
+                    <option value="50000">Notebook Compaq Intel Core I7</option>
+                    <option value="9000">Notebook RCA Intel Core I3</option>
+                    <option value="45000">Notebook Positivo BGH Core I7</option>
+                    <option value="5400">Impresora Multifunción HP</option>
+                    <option value="6700">Tablet Philco Intel 16 GB</option>
+                    <option value="4400">Tablet Huawei 16 GB</option>
+                </select>
+            </td>
+            <td><input type="number" class="cantidad" id="cantidad2" min="1"></td>
+            <td><input type="text" class="precioUnitario" id="precioUnitario2" readonly></td>
+            <td><input type="text" class="subtotal" id="subtotal2" readonly></td>
+        </tr>
+        <tr>
+            <td>
+                <select class="articulo" id="articulo3">
+                    <option value="">Seleccione</option>
+                    <option value="30000">Notebook Vaio Intel Core I3</option>
+                    <option value="45000">Notebook Lenovo Intel Core I7</option>
+                    <option value="50000">Notebook Compaq Intel Core I7</option>
+                    <option value="9000">Notebook RCA Intel Core I3</option>
+                    <option value="45000">Notebook Positivo BGH Core I7</option>
+                    <option value="5400">Impresora Multifunción HP</option>
+                    <option value="6700">Tablet Philco Intel 16 GB</option>
+                    <option value="4400">Tablet Huawei 16 GB</option>
+                </select>
+            </td>
+            <td><input type="number" class="cantidad" id="cantidad3" min="1"></td>
+            <td><input type="text" class="precioUnitario" id="precioUnitario3" readonly></td>
+            <td><input type="text" class="subtotal" id="subtotal3" readonly></td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align: right;"><strong>TOTAL:</strong></td>
+            <td><input type="text" id="total" readonly></td>
+        </tr>
+    </table>
+    <div style="margin-top: 10px;">
+        <button id="btnSubtotal">Subtotal</button>
+        <button id="btnTotal">Total</button>
+        <button id="btnReset">Resetear</button>
+    </div>
+</body>
+</html>

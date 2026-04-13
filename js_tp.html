@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaScript — Trabajo Práctico</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f5f5f5;color:#1a1a1a;font-size:15px;line-height:1.6}
+header{background:#1e1e2e;color:#cdd6f4;padding:1.5rem 2rem;border-bottom:3px solid #89b4fa}
+header h1{font-size:1.6rem;font-weight:600;margin-bottom:.25rem}
+header p{font-size:.9rem;color:#a6adc8}
+nav{background:#181825;display:flex;flex-wrap:wrap;gap:4px;padding:.75rem 2rem;position:sticky;top:0;z-index:100;border-bottom:1px solid #313244}
+nav a{color:#89b4fa;text-decoration:none;font-size:.82rem;padding:4px 10px;border-radius:4px;border:1px solid #313244;transition:background .2s}
+nav a:hover{background:#313244}
+main{max-width:1100px;margin:0 auto;padding:2rem 1.5rem}
+section{background:#fff;border-radius:10px;border:1px solid #e2e8f0;margin-bottom:2rem;overflow:hidden}
+.sec-header{background:#1e1e2e;color:#cdd6f4;padding:.85rem 1.25rem;display:flex;align-items:center;gap:.6rem}
+.sec-header .badge{background:#89b4fa;color:#1e1e2e;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:999px}
+.sec-header h2{font-size:1.05rem;font-weight:600}
+.sec-body{padding:1.25rem}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media(max-width:680px){.cols{grid-template-columns:1fr}}
+.code-block{background:#1e1e2e;color:#cdd6f4;border-radius:8px;padding:1rem;font-family:monospace;font-size:.82rem;line-height:1.7;overflow-x:auto;margin:.75rem 0;white-space:pre}
+.kw{color:#cba6f7}.fn{color:#89b4fa}.str{color:#a6e3a1}.num{color:#fab387}.cm{color:#6c7086;font-style:italic}.op{color:#89dceb}
+.output-box{background:#eff1f5;border:1px solid #dce0e8;border-radius:6px;padding:.75rem 1rem;font-family:monospace;font-size:.82rem;margin-top:.5rem;min-height:36px;color:#1a1a1a}
+.output-box.success{background:#e6ffed;border-color:#4caf50;color:#1b5e20}
+.output-box.error{background:#fff0f0;border-color:#e53935;color:#b71c1c}
+.run-btn{background:#89b4fa;color:#1e1e2e;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600;margin-top:.5rem;transition:background .2s}
+.run-btn:hover{background:#74c7ec}
+.concept-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem;margin:.75rem 0}
+.concept-card{background:#f0f4ff;border:1px solid #c7d7ff;border-radius:8px;padding:.75rem;font-size:.83rem}
+.concept-card strong{display:block;color:#1e3a8a;margin-bottom:.3rem;font-size:.85rem}
+.tag{display:inline-block;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:1px 7px;font-size:.75rem;margin:2px}
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin:.75rem 0}
+th{background:#1e1e2e;color:#cdd6f4;padding:7px 12px;text-align:left}
+td{padding:7px 12px;border-bottom:1px solid #e2e8f0}
+tr:nth-child(even) td{background:#f8faff}
+.demo-area{background:#f8f9ff;border:1px dashed #c7d7ff;border-radius:8px;padding:1rem;margin:.75rem 0}
+#dom-container{padding:1rem;background:#fff;border:1px solid #dce0e8;border-radius:6px;margin:.5rem 0}
+#dom-container p{margin:.4rem 0;padding:.3rem .6rem;border-radius:4px}
+.highlight-dom{background:#fff9c4!important;border:1px solid #f6c700!important;transition:all .3s}
+input[type=text],input[type=number],select{border:1px solid #cbd5e1;border-radius:5px;padding:5px 9px;font-size:.85rem;background:#fff;color:#1a1a1a;width:100%;margin:.25rem 0}
+.flex-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:flex-start;margin:.5rem 0}
+.flex-row button{background:#e0e7ff;color:#3730a3;border:1px solid #c7d7ff;padding:5px 12px;border-radius:5px;cursor:pointer;font-size:.82rem;transition:background .2s}
+.flex-row button:hover{background:#c7d7ff}
+.event-log{background:#1e1e2e;color:#a6e3a1;font-family:monospace;font-size:.78rem;padding:.75rem;border-radius:6px;min-height:70px;max-height:140px;overflow-y:auto;margin:.5rem 0}
+.event-log span{display:block}
+#bom-info{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:.75rem;font-size:.83rem;margin:.5rem 0}
+#bom-info strong{color:#15803d}
+#jquery-demo-list li{padding:4px 8px;margin:3px 0;background:#f0f4ff;border-radius:4px;cursor:pointer;font-size:.85rem;list-style:none}
+#jquery-demo-list li.selected{background:#89b4fa;color:#1e1e2e;font-weight:600}
+.exc-type{display:inline-block;background:#fee2e2;color:#991b1b;border-radius:4px;padding:1px 8px;font-size:.78rem;margin:2px}
+.section-note{font-size:.83rem;color:#64748b;margin:.5rem 0 .75rem;padding:.5rem .75rem;background:#f8faff;border-left:3px solid #89b4fa;border-radius:0 6px 6px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>JavaScript — Trabajo Práctico Completo</h1>
+  <p>Grupo 2 · Conceptos, Variables, Operadores, DOM, BOM, Eventos, jQuery y Manejo de Excepciones</p>
+</header>
+
+<nav>
+  <a href="#s1">Concepto</a>
+  <a href="#s2">Variables</a>
+  <a href="#s3">Operadores</a>
+  <a href="#s4">Selectores</a>
+  <a href="#s5">DOM</a>
+  <a href="#s6">BOM</a>
+  <a href="#s7">Eventos</a>
+  <a href="#s8">jQuery</a>
+  <a href="#s9">Funciones</a>
+  <a href="#s10">Excepciones</a>
+</nav>
+
+<main>
+
+<!-- 1. CONCEPTO Y CARACTERÍSTICAS -->
+<section id="s1">
+  <div class="sec-header"><span class="badge">01</span><h2>Concepto y Características de JavaScript</h2></div>
+  <div class="sec-body">
+    <p class="section-note">JavaScript es un lenguaje de programación interpretado, de alto nivel, orientado a objetos basado en prototipos, y multiparadigma. Fue creado en 1995 por Brendan Eich en Netscape y es hoy el único lenguaje nativo de los navegadores web.</p>
+    <div class="concept-grid">
+      <div class="concept-card"><strong>Interpretado / JIT</strong>No necesita compilación previa. Los motores modernos (V8, SpiderMonkey) usan compilación Just-In-Time.</div>
+      <div class="concept-card"><strong>Tipado dinámico</strong>Las variables no tienen tipo fijo; el tipo se determina en tiempo de ejecución.</div>
+      <div class="concept-card"><strong>Multiparadigma</strong>Soporta programación imperativa, funcional y orientada a objetos (prototipado).</div>
+      <div class="concept-card"><strong>Single-threaded</strong>Un solo hilo de ejecución con event loop. La asincronía se gestiona con callbacks, Promises y async/await.</div>
+      <div class="concept-card"><strong>Basado en ECMAScript</strong>El estándar que define el lenguaje. ES6 (2015) fue la actualización más importante.</div>
+      <div class="concept-card"><strong>Ubiquitous</strong>Corre en el navegador (front-end), en el servidor (Node.js), en apps móviles (React Native) y más.</div>
+    </div>
+    <div class="code-block"><span class="cm">// Un programa JavaScript mínimo</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"¡Hola, mundo!"</span>);   <span class="cm">// Salida en consola</span>
+<span class="fn">alert</span>(<span class="str">"Soy JavaScript"</span>);       <span class="cm">// Diálogo en el navegador</span></div>
+  </div>
+</section>
+
+<!-- 2. VARIABLES -->
+<section id="s2">
+  <div class="sec-header"><span class="badge">02</span><h2>Variables — var, let, const y Tipos de Datos</h2></div>
+  <div class="sec-body">
+    <p class="section-note">Una variable es un contenedor para almacenar valores. JavaScript tiene tres formas de declararlas, con diferencias importantes de alcance (scope) y mutabilidad.</p>
+
+    <table>
+      <tr><th>Palabra clave</th><th>Scope</th><th>Reasignable</th><th>Hoisting</th><th>Uso recomendado</th></tr>
+      <tr><td><code>var</code></td><td>Función</td><td>Sí</td><td>Sí (undefined)</td><td>Código legacy, evitar</td></tr>
+      <tr><td><code>let</code></td><td>Bloque</td><td>Sí</td><td>No (TDZ)</td><td>Valores que cambian</td></tr>
+      <tr><td><code>const</code></td><td>Bloque</td><td>No</td><td>No (TDZ)</td><td>Valores constantes (preferido)</td></tr>
+    </table>
+
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── Tipos primitivos ──</span>
+<span class="kw">let</span> nombre  <span class="op">=</span> <span class="str">"María"</span>;         <span class="cm">// string</span>
+<span class="kw">let</span> edad    <span class="op">=</span> <span class="num">25</span>;              <span class="cm">// number</span>
+<span class="kw">let</span> pi      <span class="op">=</span> <span class="num">3.14</span>;            <span class="cm">// number (float)</span>
+<span class="kw">let</span> activo  <span class="op">=</span> <span class="kw">true</span>;            <span class="cm">// boolean</span>
+<span class="kw">let</span> nada    <span class="op">=</span> <span class="kw">null</span>;            <span class="cm">// null</span>
+<span class="kw">let</span> undef;                     <span class="cm">// undefined</span>
+<span class="kw">let</span> id      <span class="op">=</span> <span class="fn">Symbol</span>(<span class="str">"id"</span>);   <span class="cm">// symbol</span>
+
+<span class="cm">// ── Tipos de referencia ──</span>
+<span class="kw">const</span> lista <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>];       <span class="cm">// Array</span>
+<span class="kw">const</span> persona <span class="op">=</span> {              <span class="cm">// Object</span>
+  nombre: <span class="str">"Ana"</span>,
+  edad: <span class="num">30</span>
+};
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="kw">typeof</span> nombre);   <span class="cm">// "string"</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="kw">typeof</span> lista);    <span class="cm">// "object"</span></div>
+      </div>
+      <div>
+        <div class="code-block"><span class="cm">// ── Diferencia de scope ──</span>
+<span class="kw">function</span> <span class="fn">demoScope</span>() {
+  <span class="kw">var</span>   x <span class="op">=</span> <span class="num">1</span>;  <span class="cm">// scope: función</span>
+  <span class="kw">let</span>   y <span class="op">=</span> <span class="num">2</span>;  <span class="cm">// scope: bloque</span>
+  <span class="kw">const</span> z <span class="op">=</span> <span class="num">3</span>;  <span class="cm">// scope: bloque</span>
+
+  <span class="kw">if</span> (<span class="kw">true</span>) {
+    <span class="kw">var</span>   x <span class="op">=</span> <span class="num">10</span>; <span class="cm">// ← SOBREESCRIBE x</span>
+    <span class="kw">let</span>   y <span class="op">=</span> <span class="num">20</span>; <span class="cm">// nueva y del bloque</span>
+  }
+  <span class="fn">console</span>.<span class="fn">log</span>(x); <span class="cm">// 10 ← peligro con var</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(y); <span class="cm">// 2  ← let correcto</span>
+}
+
+<span class="cm">// ── Coerción de tipos ──</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"5"</span> <span class="op">+</span> <span class="num">3</span>);   <span class="cm">// "53" (concat)</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"5"</span> <span class="op">-</span> <span class="num">3</span>);   <span class="cm">// 2   (numérico)</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="op">!!</span><span class="num">0</span>);       <span class="cm">// false (falsy)</span></div>
+
+        <button class="run-btn" onclick="runVars()">▶ Ejecutar Demo</button>
+        <div class="output-box" id="out-vars">El resultado aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. OPERADORES -->
+<section id="s3">
+  <div class="sec-header"><span class="badge">03</span><h2>Operadores</h2></div>
+  <div class="sec-body">
+    <p class="section-note">Los operadores permiten realizar operaciones sobre valores. JavaScript tiene una gran variedad: aritméticos, de asignación, comparación, lógicos, de cadena, ternario y más.</p>
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── Aritméticos ──</span>
+<span class="num">10</span> <span class="op">+</span> <span class="num">3</span>   <span class="cm">// 13 (suma)</span>
+<span class="num">10</span> <span class="op">-</span> <span class="num">3</span>   <span class="cm">// 7  (resta)</span>
+<span class="num">10</span> <span class="op">*</span> <span class="num">3</span>   <span class="cm">// 30 (mult)</span>
+<span class="num">10</span> <span class="op">/</span> <span class="num">3</span>   <span class="cm">// 3.33.. (div)</span>
+<span class="num">10</span> <span class="op">%</span> <span class="num">3</span>   <span class="cm">// 1  (módulo)</span>
+<span class="num">2</span>  <span class="op">**</span> <span class="num">8</span>  <span class="cm">// 256 (potencia)</span>
+
+<span class="cm">// ── Asignación ──</span>
+<span class="kw">let</span> n <span class="op">=</span> <span class="num">5</span>;
+n <span class="op">+=</span> <span class="num">3</span>;  <span class="cm">// n = 8</span>
+n <span class="op">-=</span> <span class="num">2</span>;  <span class="cm">// n = 6</span>
+n <span class="op">*=</span> <span class="num">2</span>;  <span class="cm">// n = 12</span>
+n <span class="op">++</span>;    <span class="cm">// n = 13 (post-incremento)</span>
+<span class="op">++</span>n;    <span class="cm">// n = 14 (pre-incremento)</span>
+
+<span class="cm">// ── Ternario ──</span>
+<span class="kw">const</span> msg <span class="op">=</span> n <span class="op">></span> <span class="num">10</span>
+  <span class="op">?</span> <span class="str">"mayor que 10"</span>
+  <span class="op">:</span> <span class="str">"menor o igual"</span>;</div>
+      </div>
+      <div>
+        <div class="code-block"><span class="cm">// ── Comparación ──</span>
+<span class="num">5</span> <span class="op">==</span>  <span class="str">"5"</span>   <span class="cm">// true  (== igualdad débil)</span>
+<span class="num">5</span> <span class="op">===</span> <span class="str">"5"</span>   <span class="cm">// false (=== igualdad estricta)</span>
+<span class="num">5</span> <span class="op">!=</span>  <span class="str">"5"</span>   <span class="cm">// false</span>
+<span class="num">5</span> <span class="op">!==</span> <span class="str">"5"</span>   <span class="cm">// true  ← siempre preferir !==</span>
+<span class="num">5</span> <span class="op">></span>   <span class="num">3</span>    <span class="cm">// true</span>
+<span class="num">5</span> <span class="op">>=</span>  <span class="num">5</span>    <span class="cm">// true</span>
+
+<span class="cm">// ── Lógicos ──</span>
+<span class="kw">true</span> <span class="op">&&</span> <span class="kw">false</span>   <span class="cm">// false (AND)</span>
+<span class="kw">true</span> <span class="op">||</span> <span class="kw">false</span>   <span class="cm">// true  (OR)</span>
+<span class="op">!</span><span class="kw">true</span>           <span class="cm">// false (NOT)</span>
+
+<span class="cm">// ── Nullish Coalescing (??) ──</span>
+<span class="kw">let</span> val <span class="op">=</span> <span class="kw">null</span> <span class="op">??</span> <span class="str">"defecto"</span>;  <span class="cm">// "defecto"</span>
+
+<span class="cm">// ── Optional Chaining (?.) ──</span>
+<span class="kw">const</span> ciudad <span class="op">=</span> user<span class="op">?.</span>direccion<span class="op">?.</span>ciudad;</div>
+
+        <button class="run-btn" onclick="runOps()">▶ Probar Operadores</button>
+        <div class="output-box" id="out-ops">El resultado aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. SELECTORES CSS -->
+<section id="s4">
+  <div class="sec-header"><span class="badge">04</span><h2>Selectores — getElementById, querySelector y más</h2></div>
+  <div class="sec-body">
+    <p class="section-note">Los selectores permiten obtener referencias a elementos del HTML para manipularlos. Son la puerta de entrada al DOM.</p>
+    <table>
+      <tr><th>Método</th><th>Retorna</th><th>Selector</th></tr>
+      <tr><td><code>getElementById(id)</code></td><td>Element o null</td><td>Solo por ID</td></tr>
+      <tr><td><code>getElementsByClassName(cls)</code></td><td>HTMLCollection (viva)</td><td>Por clase</td></tr>
+      <tr><td><code>getElementsByTagName(tag)</code></td><td>HTMLCollection (viva)</td><td>Por etiqueta</td></tr>
+      <tr><td><code>querySelector(css)</code></td><td>Primer Element o null</td><td>Cualquier selector CSS</td></tr>
+      <tr><td><code>querySelectorAll(css)</code></td><td>NodeList (estática)</td><td>Todos los que coincidan</td></tr>
+    </table>
+    <div class="code-block"><span class="cm">// Por ID</span>
+<span class="kw">const</span> titulo <span class="op">=</span> document.<span class="fn">getElementById</span>(<span class="str">"titulo"</span>);
+
+<span class="cm">// Por clase (devuelve colección viva)</span>
+<span class="kw">const</span> items <span class="op">=</span> document.<span class="fn">getElementsByClassName</span>(<span class="str">"item"</span>);
+
+<span class="cm">// querySelector (selector CSS completo)</span>
+<span class="kw">const</span> primer  <span class="op">=</span> document.<span class="fn">querySelector</span>(<span class="str">"ul.menu > li:first-child"</span>);
+<span class="kw">const</span> todos   <span class="op">=</span> document.<span class="fn">querySelectorAll</span>(<span class="str">".card[data-activo='true']"</span>);
+
+<span class="cm">// Iterar NodeList</span>
+todos.<span class="fn">forEach</span>(el <span class="op">=></span> el.style.color <span class="op">=</span> <span class="str">"red"</span>);
+
+<span class="cm">// Selectores relativos</span>
+<span class="kw">const</span> hijo     <span class="op">=</span> padre.<span class="fn">querySelector</span>(<span class="str">".hijo"</span>);   <span class="cm">// dentro de padre</span>
+<span class="kw">const</span> siguiente<span class="op">=</span> el.<span class="fn">nextElementSibling</span>;           <span class="cm">// hermano siguiente</span>
+<span class="kw">const</span> padre2   <span class="op">=</span> el.<span class="fn">closest</span>(<span class="str">".contenedor"</span>);      <span class="cm">// ancestro más cercano</span></div>
+  </div>
+</section>
+
+<!-- 5. DOM -->
+<section id="s5">
+  <div class="sec-header"><span class="badge">05</span><h2>DOM — Document Object Model</h2></div>
+  <div class="sec-body">
+    <p class="section-note">El DOM es la representación en memoria del documento HTML como un árbol de nodos. JavaScript puede leer y modificar cualquier parte de este árbol: contenido, atributos, estilos y estructura.</p>
+
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── Leer y modificar contenido ──</span>
+el.textContent <span class="op">=</span> <span class="str">"Nuevo texto"</span>;
+el.innerHTML   <span class="op">=</span> <span class="str">"&lt;b&gt;HTML&lt;/b&gt;"</span>;
+
+<span class="cm">// ── Atributos ──</span>
+el.<span class="fn">setAttribute</span>(<span class="str">"href"</span>, <span class="str">"https://..."</span>);
+el.<span class="fn">getAttribute</span>(<span class="str">"href"</span>);
+el.<span class="fn">removeAttribute</span>(<span class="str">"disabled"</span>);
+
+<span class="cm">// ── Clases ──</span>
+el.classList.<span class="fn">add</span>(<span class="str">"activo"</span>);
+el.classList.<span class="fn">remove</span>(<span class="str">"activo"</span>);
+el.classList.<span class="fn">toggle</span>(<span class="str">"visible"</span>);
+el.classList.<span class="fn">contains</span>(<span class="str">"activo"</span>);
+
+<span class="cm">// ── Estilos ──</span>
+el.style.backgroundColor <span class="op">=</span> <span class="str">"#ff0"</span>;
+el.style.display         <span class="op">=</span> <span class="str">"none"</span>;
+
+<span class="cm">// ── Crear e insertar nodos ──</span>
+<span class="kw">const</span> nuevo <span class="op">=</span> document.<span class="fn">createElement</span>(<span class="str">"li"</span>);
+nuevo.textContent <span class="op">=</span> <span class="str">"Elemento nuevo"</span>;
+lista.<span class="fn">appendChild</span>(nuevo);
+lista.<span class="fn">insertBefore</span>(nuevo, lista.firstChild);
+
+<span class="cm">// ── Eliminar ──</span>
+el.<span class="fn">remove</span>();
+padre.<span class="fn">removeChild</span>(hijo);</div>
+      </div>
+      <div>
+        <p style="font-size:.85rem;color:#64748b;margin-bottom:.5rem">Demo interactivo — modifica el DOM en tiempo real:</p>
+        <div class="demo-area">
+          <div id="dom-container">
+            <p id="p1">Párrafo 1 — haz clic en los botones</p>
+            <p id="p2">Párrafo 2 — prueba los efectos</p>
+            <p id="p3">Párrafo 3 — observa el DOM cambiar</p>
+          </div>
+          <div class="flex-row">
+            <button onclick="domHighlight()">Resaltar p1</button>
+            <button onclick="domChangeText()">Cambiar texto p2</button>
+            <button onclick="domAddNode()">Agregar nodo</button>
+            <button onclick="domRemoveNode()">Eliminar último</button>
+            <button onclick="domToggleStyle()">Toggle color p3</button>
+          </div>
+          <div class="output-box" id="out-dom" style="margin-top:.5rem">Las acciones DOM aparecerán aquí...</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:.75rem">
+      <div class="code-block"><span class="cm">// ── Traversal del árbol DOM ──</span>
+document.documentElement   <span class="cm">// &lt;html&gt;</span>
+document.head              <span class="cm">// &lt;head&gt;</span>
+document.body              <span class="cm">// &lt;body&gt;</span>
+
+el.parentNode              <span class="cm">// nodo padre</span>
+el.children                <span class="cm">// hijos (HTMLCollection)</span>
+el.firstElementChild       <span class="cm">// primer hijo elemento</span>
+el.lastElementChild        <span class="cm">// último hijo elemento</span>
+el.nextElementSibling      <span class="cm">// hermano siguiente</span>
+el.previousElementSibling  <span class="cm">// hermano anterior</span>
+el.childNodes              <span class="cm">// todos los nodos hijo (incluye texto)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. BOM -->
+<section id="s6">
+  <div class="sec-header"><span class="badge">06</span><h2>BOM — Browser Object Model</h2></div>
+  <div class="sec-body">
+    <p class="section-note">El BOM permite interactuar con el navegador más allá del documento. El objeto global es <code>window</code>, que contiene objetos como <code>navigator</code>, <code>location</code>, <code>history</code>, <code>screen</code> y métodos de tiempo.</p>
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── window ──</span>
+window.<span class="fn">alert</span>(<span class="str">"Mensaje"</span>);
+window.<span class="fn">confirm</span>(<span class="str">"¿Continuar?"</span>);  <span class="cm">// bool</span>
+window.<span class="fn">prompt</span>(<span class="str">"Nombre:"</span>);         <span class="cm">// string</span>
+window.innerWidth;   <span class="cm">// ancho viewport</span>
+window.innerHeight;  <span class="cm">// alto viewport</span>
+
+<span class="cm">// ── location ──</span>
+location.href;       <span class="cm">// URL completa</span>
+location.hostname;   <span class="cm">// dominio</span>
+location.pathname;   <span class="cm">// ruta</span>
+location.search;     <span class="cm">// query string ?a=1</span>
+location.<span class="fn">reload</span>();   <span class="cm">// recargar página</span>
+location.href <span class="op">=</span> <span class="str">"https://..."</span>;
+
+<span class="cm">// ── history ──</span>
+history.<span class="fn">back</span>();
+history.<span class="fn">forward</span>();
+history.<span class="fn">go</span>(<span class="op">-</span><span class="num">2</span>);  <span class="cm">// 2 páginas atrás</span>
+
+<span class="cm">// ── navigator ──</span>
+navigator.userAgent;
+navigator.language;
+navigator.onLine;</div>
+      </div>
+      <div>
+        <div class="code-block"><span class="cm">// ── Timers ──</span>
+
+<span class="cm">// setTimeout: ejecutar una vez</span>
+<span class="kw">const</span> t1 <span class="op">=</span> <span class="fn">setTimeout</span>(() <span class="op">=></span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Pasaron 2 segundos"</span>);
+}, <span class="num">2000</span>);
+<span class="fn">clearTimeout</span>(t1);  <span class="cm">// cancelar</span>
+
+<span class="cm">// setInterval: repetir cada N ms</span>
+<span class="kw">let</span> count <span class="op">=</span> <span class="num">0</span>;
+<span class="kw">const</span> t2 <span class="op">=</span> <span class="fn">setInterval</span>(() <span class="op">=></span> {
+  count<span class="op">++</span>;
+  <span class="kw">if</span> (count <span class="op">>=</span> <span class="num">5</span>) <span class="fn">clearInterval</span>(t2);
+}, <span class="num">1000</span>);
+
+<span class="cm">// requestAnimationFrame (animaciones)</span>
+<span class="kw">function</span> <span class="fn">animar</span>(ts) {
+  <span class="cm">// lógica de animación</span>
+  <span class="fn">requestAnimationFrame</span>(animar);
+}</div>
+        <button class="run-btn" onclick="runBOM()">▶ Ver info del navegador</button>
+        <div id="bom-info" style="display:none"></div>
+      </div>
+    </div>
+
+    <p style="font-size:.85rem;color:#64748b;margin:.75rem 0 .25rem">Timer demo — setInterval en vivo:</p>
+    <div class="demo-area" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+      <button class="run-btn" id="btn-timer" onclick="toggleTimer()">▶ Iniciar timer</button>
+      <span style="font-size:1.4rem;font-weight:600;font-family:monospace;color:#1e1e2e" id="timer-display">0s</span>
+      <span style="font-size:.82rem;color:#64748b">setInterval cada 1000ms</span>
+    </div>
+  </div>
+</section>
+
+<!-- 7. EVENTOS -->
+<section id="s7">
+  <div class="sec-header"><span class="badge">07</span><h2>Eventos</h2></div>
+  <div class="sec-body">
+    <p class="section-note">Los eventos permiten responder a interacciones del usuario o del navegador. Se registran con <code>addEventListener</code> y reciben un objeto <code>Event</code> con información del suceso.</p>
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── Formas de registrar eventos ──</span>
+
+<span class="cm">// 1. HTML inline (evitar)</span>
+<span class="cm">// &lt;button onclick="fn()"&gt;</span>
+
+<span class="cm">// 2. Propiedad (solo 1 handler)</span>
+btn.onclick <span class="op">=</span> <span class="kw">function</span>() { <span class="cm">/* ... */</span> };
+
+<span class="cm">// 3. addEventListener (recomendado)</span>
+btn.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, handler);
+btn.<span class="fn">removeEventListener</span>(<span class="str">"click"</span>, handler);
+
+<span class="cm">// ── El objeto Event ──</span>
+<span class="kw">function</span> <span class="fn">handler</span>(e) {
+  e.type;          <span class="cm">// "click"</span>
+  e.target;        <span class="cm">// elemento que disparó</span>
+  e.currentTarget; <span class="cm">// elemento con listener</span>
+  e.<span class="fn">preventDefault</span>();  <span class="cm">// cancela default</span>
+  e.<span class="fn">stopPropagation</span>(); <span class="cm">// detiene bubbling</span>
+  e.clientX; e.clientY; <span class="cm">// posición del mouse</span>
+  e.key;           <span class="cm">// tecla presionada</span>
+}
+
+<span class="cm">// ── Event Delegation ──</span>
+lista.<span class="fn">addEventListener</span>(<span class="str">"click"</span>, e <span class="op">=></span> {
+  <span class="kw">if</span> (e.target.matches(<span class="str">"li"</span>)) {
+    <span class="fn">console</span>.<span class="fn">log</span>(e.target.textContent);
+  }
+});</div>
+      </div>
+      <div>
+        <p style="font-size:.85rem;color:#64748b;margin-bottom:.5rem">Área de eventos interactiva:</p>
+        <div class="demo-area">
+          <input type="text" id="evt-input" placeholder="Escribe aquí (keyup, focus, blur)..." style="margin-bottom:.5rem">
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem">
+            <button id="evt-btn" onmouseenter="logEvt('mouseenter')" onmouseleave="logEvt('mouseleave')" onclick="logEvt('click')">Hover / Click</button>
+            <button onclick="logEvt('doble-click')" ondblclick="logEvt('dblclick real')">Doble Click</button>
+          </div>
+          <div class="event-log" id="event-log"><span style="color:#6c7086">Los eventos aparecerán aquí...</span></div>
+          <button class="run-btn" onclick="document.getElementById('event-log').innerHTML='<span style=color:#6c7086>Log limpiado</span>'">Limpiar log</button>
+        </div>
+        <div class="code-block" style="margin-top:.75rem"><span class="cm">// Tipos de eventos más comunes</span>
+<span class="cm">// Mouse:    click, dblclick, mouseenter,</span>
+<span class="cm">//           mouseleave, mousemove</span>
+<span class="cm">// Teclado:  keydown, keyup, keypress</span>
+<span class="cm">// Formulario: submit, change, input, focus, blur</span>
+<span class="cm">// Documento: DOMContentLoaded, load</span>
+<span class="cm">// Ventana:  resize, scroll</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. JQUERY -->
+<section id="s8">
+  <div class="sec-header"><span class="badge">08</span><h2>jQuery — Selectores, Métodos y Eventos</h2></div>
+  <div class="sec-body">
+    <p class="section-note">jQuery es una biblioteca que simplifica la manipulación del DOM, el manejo de eventos y las peticiones AJAX. Se importa con <code>&lt;script src="jquery.min.js"&gt;</code> y se accede con <code>$</code> o <code>jQuery</code>.</p>
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── Selectores jQuery ──</span>
+$(<span class="str">"#id"</span>)           <span class="cm">// por ID</span>
+$(<span class="str">".clase"</span>)        <span class="cm">// por clase</span>
+$(<span class="str">"div"</span>)           <span class="cm">// por tag</span>
+$(<span class="str">"ul li:first"</span>)  <span class="cm">// CSS + pseudo</span>
+$(<span class="str">"input[type=text]"</span>) <span class="cm">// por atributo</span>
+
+<span class="cm">// ── DOM ──</span>
+$(<span class="str">"#p"</span>).<span class="fn">text</span>(<span class="str">"Nuevo"</span>);
+$(<span class="str">"#p"</span>).<span class="fn">html</span>(<span class="str">"&lt;b&gt;Bold&lt;/b&gt;"</span>);
+$(<span class="str">"#p"</span>).<span class="fn">val</span>();         <span class="cm">// input value</span>
+$(<span class="str">"#p"</span>).<span class="fn">attr</span>(<span class="str">"href"</span>);  <span class="cm">// attr</span>
+$(<span class="str">"#p"</span>).<span class="fn">css</span>(<span class="str">"color"</span>, <span class="str">"red"</span>);
+
+<span class="cm">// ── Clases ──</span>
+$(<span class="str">".item"</span>).<span class="fn">addClass</span>(<span class="str">"activo"</span>);
+$(<span class="str">".item"</span>).<span class="fn">removeClass</span>(<span class="str">"activo"</span>);
+$(<span class="str">".item"</span>).<span class="fn">toggleClass</span>(<span class="str">"activo"</span>);
+
+<span class="cm">// ── Efectos ──</span>
+$(<span class="str">"#caja"</span>).<span class="fn">hide</span>();
+$(<span class="str">"#caja"</span>).<span class="fn">show</span>();
+$(<span class="str">"#caja"</span>).<span class="fn">toggle</span>();
+$(<span class="str">"#caja"</span>).<span class="fn">fadeIn</span>(<span class="num">400</span>);
+$(<span class="str">"#caja"</span>).<span class="fn">slideDown</span>(<span class="num">300</span>);
+
+<span class="cm">// ── Chaining ──</span>
+$(<span class="str">"#el"</span>)
+  .<span class="fn">addClass</span>(<span class="str">"activo"</span>)
+  .<span class="fn">css</span>(<span class="str">"color"</span>, <span class="str">"blue"</span>)
+  .<span class="fn">text</span>(<span class="str">"Modificado"</span>);</div>
+      </div>
+      <div>
+        <div class="code-block"><span class="cm">// ── Eventos jQuery ──</span>
+$(<span class="str">"#btn"</span>).<span class="fn">on</span>(<span class="str">"click"</span>, <span class="kw">function</span>() {
+  $(<span class="kw">this</span>).<span class="fn">toggleClass</span>(<span class="str">"activo"</span>);
+});
+
+<span class="cm">// Shorthand</span>
+$(<span class="str">"#btn"</span>).<span class="fn">click</span>(handler);
+$(<span class="str">"input"</span>).<span class="fn">keyup</span>(handler);
+
+<span class="cm">// Delegación de eventos</span>
+$(<span class="str">"#lista"</span>).<span class="fn">on</span>(<span class="str">"click"</span>, <span class="str">"li"</span>, <span class="kw">function</span>() {
+  $(<span class="kw">this</span>).<span class="fn">toggleClass</span>(<span class="str">"selected"</span>);
+});
+
+<span class="cm">// AJAX con jQuery</span>
+$.<span class="fn">ajax</span>({
+  url: <span class="str">"/api/data"</span>,
+  method: <span class="str">"GET"</span>,
+  success: data <span class="op">=></span> <span class="fn">console</span>.<span class="fn">log</span>(data),
+  error: err   <span class="op">=></span> <span class="fn">console</span>.<span class="fn">error</span>(err)
+});
+
+<span class="cm">// ── Document Ready ──</span>
+$(<span class="kw">function</span>() {
+  <span class="cm">// se ejecuta cuando el DOM está listo</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"DOM listo"</span>);
+});</div>
+
+        <p style="font-size:.85rem;color:#64748b;margin:.75rem 0 .5rem">Demo jQuery interactivo:</p>
+        <div class="demo-area">
+          <ul id="jquery-demo-list">
+            <li>Elemento jQuery 1</li>
+            <li>Elemento jQuery 2</li>
+            <li>Elemento jQuery 3</li>
+          </ul>
+          <div class="flex-row" style="margin-top:.5rem">
+            <button onclick="jqAdd()">+ Agregar ítem</button>
+            <button onclick="jqFade()">Fade toggle</button>
+            <button onclick="jqAnimate()">Animate CSS</button>
+          </div>
+          <div class="output-box" id="out-jq" style="margin-top:.5rem">Usa los botones para ver jQuery en acción</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. FUNCIONES -->
+<section id="s9">
+  <div class="sec-header"><span class="badge">09</span><h2>Funciones — Declaración, Expresión, Arrow, Callbacks, Closures</h2></div>
+  <div class="sec-body">
+    <p class="section-note">Las funciones son ciudadanos de primera clase en JavaScript: se pueden asignar a variables, pasar como argumentos y retornar desde otras funciones.</p>
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── Declaración ──</span>
+<span class="kw">function</span> <span class="fn">sumar</span>(a, b) {
+  <span class="kw">return</span> a <span class="op">+</span> b;
+}
+
+<span class="cm">// ── Expresión ──</span>
+<span class="kw">const</span> restar <span class="op">=</span> <span class="kw">function</span>(a, b) {
+  <span class="kw">return</span> a <span class="op">-</span> b;
+};
+
+<span class="cm">// ── Arrow function ──</span>
+<span class="kw">const</span> mult <span class="op">=</span> (a, b) <span class="op">=></span> a <span class="op">*</span> b;
+<span class="kw">const</span> doble <span class="op">=</span> n <span class="op">=></span> n <span class="op">*</span> <span class="num">2</span>;
+
+<span class="cm">// ── Parámetros por defecto ──</span>
+<span class="kw">function</span> <span class="fn">saludar</span>(nombre <span class="op">=</span> <span class="str">"visitante"</span>) {
+  <span class="kw">return</span> <span class="str">`Hola, ${nombre}!`</span>;
+}
+
+<span class="cm">// ── Rest params ──</span>
+<span class="kw">function</span> <span class="fn">total</span>(...nums) {
+  <span class="kw">return</span> nums.<span class="fn">reduce</span>((a, b) <span class="op">=></span> a <span class="op">+</span> b, <span class="num">0</span>);
+}
+<span class="fn">total</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>); <span class="cm">// 10</span></div>
+      </div>
+      <div>
+        <div class="code-block"><span class="cm">// ── Callback ──</span>
+<span class="kw">function</span> <span class="fn">operar</span>(a, b, <span class="fn">cb</span>) {
+  <span class="kw">return</span> <span class="fn">cb</span>(a, b);
+}
+<span class="fn">operar</span>(<span class="num">4</span>, <span class="num">5</span>, mult);  <span class="cm">// 20</span>
+
+<span class="cm">// ── Closure ──</span>
+<span class="kw">function</span> <span class="fn">contador</span>(inicio <span class="op">=</span> <span class="num">0</span>) {
+  <span class="kw">let</span> n <span class="op">=</span> inicio;
+  <span class="kw">return</span> {
+    incrementar: () <span class="op">=></span> <span class="op">++</span>n,
+    valor:       () <span class="op">=></span> n,
+    reset:       () <span class="op">=></span> { n <span class="op">=</span> inicio; }
+  };
+}
+<span class="kw">const</span> c <span class="op">=</span> <span class="fn">contador</span>(<span class="num">10</span>);
+c.<span class="fn">incrementar</span>(); <span class="cm">// 11</span>
+c.<span class="fn">valor</span>();       <span class="cm">// 11</span>
+
+<span class="cm">// ── IIFE ──</span>
+(<span class="kw">function</span>() {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Ejecuta inmediatamente"</span>);
+})();
+
+<span class="cm">// ── Async / Await ──</span>
+<span class="kw">async function</span> <span class="fn">fetchData</span>(url) {
+  <span class="kw">const</span> res  <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(url);
+  <span class="kw">const</span> json <span class="op">=</span> <span class="kw">await</span> res.<span class="fn">json</span>();
+  <span class="kw">return</span> json;
+}</div>
+        <button class="run-btn" onclick="runFunciones()">▶ Demo Closure / Callbacks</button>
+        <div class="output-box" id="out-fn">El resultado aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10. EXCEPCIONES -->
+<section id="s10">
+  <div class="sec-header"><span class="badge">10</span><h2>Manejo de Excepciones — try / catch / finally / throw</h2></div>
+  <div class="sec-body">
+    <p class="section-note">El manejo de errores permite que el programa responda de forma controlada ante situaciones inesperadas, en lugar de colapsar.</p>
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── try / catch / finally ──</span>
+<span class="kw">try</span> {
+  <span class="cm">// código que podría fallar</span>
+  <span class="kw">const</span> data <span class="op">=</span> <span class="fn">JSON</span>.<span class="fn">parse</span>(<span class="str">"json_inválido"</span>);
+} <span class="kw">catch</span> (err) {
+  <span class="fn">console</span>.<span class="fn">error</span>(err.name);    <span class="cm">// SyntaxError</span>
+  <span class="fn">console</span>.<span class="fn">error</span>(err.message); <span class="cm">// descripción</span>
+} <span class="kw">finally</span> {
+  <span class="cm">// siempre se ejecuta</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Bloque finally"</span>);
+}
+
+<span class="cm">// ── throw personalizado ──</span>
+<span class="kw">function</span> <span class="fn">dividir</span>(a, b) {
+  <span class="kw">if</span> (b <span class="op">===</span> <span class="num">0</span>)
+    <span class="kw">throw new</span> <span class="fn">Error</span>(<span class="str">"División por cero"</span>);
+  <span class="kw">return</span> a <span class="op">/</span> b;
+}
+
+<span class="cm">// ── Clase de error personalizada ──</span>
+<span class="kw">class</span> <span class="fn">ValidationError</span> <span class="kw">extends</span> <span class="fn">Error</span> {
+  <span class="fn">constructor</span>(campo, msg) {
+    <span class="kw">super</span>(msg);
+    <span class="kw">this</span>.name  <span class="op">=</span> <span class="str">"ValidationError"</span>;
+    <span class="kw">this</span>.campo <span class="op">=</span> campo;
+  }
+}</div>
+      </div>
+      <div>
+        <div class="code-block"><span class="cm">// ── Tipos de error nativos ──</span>
+<span class="cm">// SyntaxError   — JSON.parse("x")</span>
+<span class="cm">// TypeError     — null.propiedad</span>
+<span class="cm">// ReferenceError— varNoDeclarada</span>
+<span class="cm">// RangeError    — new Array(-1)</span>
+<span class="cm">// URIError      — decodeURI("%")</span>
+
+<span class="cm">// ── Catch diferenciado ──</span>
+<span class="kw">try</span> {
+  procesarDatos();
+} <span class="kw">catch</span> (err) {
+  <span class="kw">if</span> (err <span class="kw">instanceof</span> <span class="fn">ValidationError</span>) {
+    mostrarError(err.campo, err.message);
+  } <span class="kw">else if</span> (err <span class="kw">instanceof</span> <span class="fn">TypeError</span>) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="str">"Tipo inválido"</span>, err);
+  } <span class="kw">else</span> {
+    <span class="kw">throw</span> err; <span class="cm">// relanzar si no lo manejamos</span>
+  }
+}
+
+<span class="cm">// ── Async error handling ──</span>
+<span class="kw">async function</span> <span class="fn">cargar</span>() {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> r <span class="op">=</span> <span class="kw">await</span> <span class="fn">fetch</span>(<span class="str">"/api"</span>);
+    <span class="kw">if</span> (<span class="op">!</span>r.ok) <span class="kw">throw new</span> <span class="fn">Error</span>(r.status);
+    <span class="kw">return await</span> r.<span class="fn">json</span>();
+  } <span class="kw">catch</span>(e) {
+    <span class="fn">console</span>.<span class="fn">error</span>(<span class="str">"Fetch error:"</span>, e);
+  }
+}</div>
+
+        <p style="font-size:.85rem;color:#64748b;margin:.75rem 0 .5rem">Tipos de error nativos:</p>
+        <div>
+          <span class="exc-type">SyntaxError</span>
+          <span class="exc-type">TypeError</span>
+          <span class="exc-type">ReferenceError</span>
+          <span class="exc-type">RangeError</span>
+          <span class="exc-type">URIError</span>
+          <span class="exc-type">EvalError</span>
+        </div>
+        <div style="margin-top:.75rem">
+          <label style="font-size:.85rem;color:#64748b">Simular error:</label>
+          <select id="exc-select" style="margin:.25rem 0">
+            <option value="json">SyntaxError — JSON inválido</option>
+            <option value="null">TypeError — acceder null</option>
+            <option value="ref">ReferenceError — var no declarada</option>
+            <option value="div">Error custom — dividir por cero</option>
+            <option value="valid">ValidationError — campo vacío</option>
+          </select>
+          <button class="run-btn" onclick="runException()">▶ Lanzar y capturar</button>
+          <div class="output-box error" id="out-exc" style="display:none;margin-top:.5rem"></div>
+          <div class="output-box success" id="out-exc-ok" style="display:none;margin-top:.5rem"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer style="text-align:center;padding:1.5rem;font-size:.8rem;color:#94a3b8;border-top:1px solid #e2e8f0;background:#fff;margin-top:1rem">
+  Trabajo Práctico — JavaScript · Grupo 2 · Todos los conceptos cubiertos con ejemplos interactivos
+</footer>
+
+<script>
+// ── VARIABLES DEMO ──
+function runVars() {
+  const o = document.getElementById('out-vars');
+  let n = 5; n += 3; n -= 2; n *= 2; n++;
+  const msgs = [
+    'typeof "Hola"   → ' + typeof "Hola",
+    'typeof 42       → ' + typeof 42,
+    'typeof true     → ' + typeof true,
+    'typeof null     → ' + typeof null,
+    'typeof []       → ' + typeof [],
+    '"5" + 3         → ' + ("5" + 3) + ' (coerción string)',
+    '"5" - 3         → ' + ("5" - 3) + ' (coerción numérica)',
+    '!!0             → ' + (!!0) + ' (falsy)',
+    '!!1             → ' + (!!1) + ' (truthy)',
+    'n (after ops)   → ' + n
+  ];
+  o.textContent = msgs.join('\n');
+}
+
+// ── OPERADORES DEMO ──
+function runOps() {
+  const o = document.getElementById('out-ops');
+  const a = 10, b = 3;
+  const x = null; const y = undefined;
+  const msgs = [
+    `${a} + ${b}  = ${a+b}`,
+    `${a} - ${b}  = ${a-b}`,
+    `${a} * ${b}  = ${a*b}`,
+    `${a} / ${b}  = ${(a/b).toFixed(4)}`,
+    `${a} % ${b}  = ${a%b}`,
+    `2 ** 8      = ${2**8}`,
+    `5 == "5"    → ${5=="5"} (==)`,
+    `5 === "5"   → ${5==="5"} (===)`,
+    `null ?? "def" → ${null ?? "def"} (??)`,
+    `true && false → ${true && false}`,
+    `true || false → ${true || false}`,
+    `10 > 3 ? "mayor" : "menor" → ${10>3?"mayor":"menor"}`
+  ];
+  o.textContent = msgs.join('\n');
+}
+
+// ── DOM DEMO ──
+let p3Color = false;
+function domHighlight() {
+  const p = document.getElementById('p1');
+  p.classList.add('highlight-dom');
+  document.getElementById('out-dom').textContent = 'p1 resaltado con classList.add("highlight-dom")';
+  setTimeout(() => p.classList.remove('highlight-dom'), 1500);
+}
+function domChangeText() {
+  const p = document.getElementById('p2');
+  p.innerHTML = '<b>Texto modificado</b> con <code>innerHTML</code> ✓';
+  document.getElementById('out-dom').textContent = 'p2.innerHTML cambiado en tiempo real';
+}
+let addCount = 0;
+function domAddNode() {
+  const c = document.getElementById('dom-container');
+  const p = document.createElement('p');
+  p.textContent = `Nodo creado con createElement() — #${++addCount}`;
+  p.style.color = '#1e3a8a';
+  c.appendChild(p);
+  document.getElementById('out-dom').textContent = `Nuevo nodo agregado. Total: ${c.children.length} párrafos.`;
+}
+function domRemoveNode() {
+  const c = document.getElementById('dom-container');
+  if (c.children.length > 0) {
+    const last = c.lastElementChild;
+    last.remove();
+    document.getElementById('out-dom').textContent = 'Último nodo eliminado con el.remove()';
+  }
+}
+function domToggleStyle() {
+  const p = document.getElementById('p3');
+  p3Color = !p3Color;
+  p.style.background = p3Color ? '#e0e7ff' : '';
+  p.style.color = p3Color ? '#3730a3' : '';
+  document.getElementById('out-dom').textContent = `p3 style.background toggled → ${p3Color ? 'activado' : 'desactivado'}`;
+}
+
+// ── BOM DEMO ──
+function runBOM() {
+  const d = document.getElementById('bom-info');
+  d.style.display = 'block';
+  d.innerHTML = `
+    <strong>window.innerWidth:</strong> ${window.innerWidth}px<br>
+    <strong>window.innerHeight:</strong> ${window.innerHeight}px<br>
+    <strong>navigator.language:</strong> ${navigator.language}<br>
+    <strong>navigator.onLine:</strong> ${navigator.onLine}<br>
+    <strong>navigator.userAgent:</strong> <span style="word-break:break-all;font-size:.75rem">${navigator.userAgent.substring(0,80)}...</span><br>
+    <strong>location.href:</strong> <span style="word-break:break-all;font-size:.75rem">${location.href.substring(0,60)}...</span><br>
+    <strong>screen.width x height:</strong> ${screen.width} x ${screen.height}
+  `;
+}
+let timerRunning = false, timerCount = 0, timerInterval = null;
+function toggleTimer() {
+  const btn = document.getElementById('btn-timer');
+  const disp = document.getElementById('timer-display');
+  if (!timerRunning) {
+    timerRunning = true;
+    btn.textContent = '⏹ Detener';
+    timerInterval = setInterval(() => {
+      timerCount++;
+      disp.textContent = timerCount + 's';
+    }, 1000);
+  } else {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerCount = 0;
+    disp.textContent = '0s';
+    btn.textContent = '▶ Iniciar timer';
+  }
+}
+
+// ── EVENTOS DEMO ──
+function logEvt(type) {
+  const log = document.getElementById('event-log');
+  const t = new Date().toLocaleTimeString();
+  const span = document.createElement('span');
+  span.innerHTML = `<span style="color:#89b4fa">[${t}]</span> evento: <span style="color:#f38ba8">${type}</span>`;
+  log.insertBefore(span, log.firstChild);
+}
+document.getElementById('evt-input').addEventListener('keyup', e => logEvt(`keyup → "${e.key}"`));
+document.getElementById('evt-input').addEventListener('focus', () => logEvt('focus'));
+document.getElementById('evt-input').addEventListener('blur', () => logEvt('blur'));
+
+// ── JQUERY DEMO ──
+$(function() {
+  $('#jquery-demo-list').on('click', 'li', function() {
+    $(this).toggleClass('selected');
+    $('#out-jq').text('jQuery click delegado en: "' + $(this).text() + '" → toggleClass("selected")');
+  });
+});
+let jqCount = 1;
+function jqAdd() {
+  const li = $('<li>').text('Elemento jQuery ' + (++jqCount + 3));
+  $('#jquery-demo-list').append(li);
+  $('#out-jq').text('jQuery: $("<li>").text(...) + .append() → ítem añadido');
+}
+function jqFade() {
+  $('#jquery-demo-list').fadeToggle(400, function() {
+    $('#out-jq').text('jQuery: .fadeToggle(400) completado');
+  });
+}
+function jqAnimate() {
+  $('#jquery-demo-list li').each(function(i) {
+    $(this).delay(i * 80).animate({opacity: 0.3}, 200).animate({opacity: 1}, 200);
+  });
+  $('#out-jq').text('jQuery: .each() + .delay() + .animate() en cadena');
+}
+
+// ── FUNCIONES DEMO ──
+function runFunciones() {
+  const o = document.getElementById('out-fn');
+  // Closure
+  function contador(inicio = 0) {
+    let n = inicio;
+    return { inc: () => ++n, val: () => n, reset: () => { n = inicio; } };
+  }
+  const c = contador(10);
+  c.inc(); c.inc(); c.inc();
+  // Callbacks + higher-order
+  const nums = [1,2,3,4,5,6];
+  const pares = nums.filter(n => n % 2 === 0);
+  const dobles = pares.map(n => n * 2);
+  const total = dobles.reduce((a,b) => a+b, 0);
+  const msgs = [
+    '── Closure ──',
+    'contador(10): inc×3 → ' + c.val(),
+    '',
+    '── Higher-order functions ──',
+    'array: ' + nums,
+    'filter(par): ' + pares,
+    'map(×2): ' + dobles,
+    'reduce(suma): ' + total,
+    '',
+    '── Arrow vs Function ──',
+    'doble(7) = ' + (n => n*2)(7),
+    'total(1,2,3,4) = ' + [1,2,3,4].reduce((a,b)=>a+b,0)
+  ];
+  o.textContent = msgs.join('\n');
+}
+
+// ── EXCEPCIONES DEMO ──
+class ValidationError extends Error {
+  constructor(campo, msg) {
+    super(msg); this.name = 'ValidationError'; this.campo = campo;
+  }
+}
+function runException() {
+  const sel = document.getElementById('exc-select').value;
+  const outErr = document.getElementById('out-exc');
+  const outOk = document.getElementById('out-exc-ok');
+  outErr.style.display = 'none';
+  outOk.style.display = 'none';
+  try {
+    if (sel === 'json') JSON.parse('esto no es json {{{');
+    else if (sel === 'null') { const x = null; x.propiedad; }
+    else if (sel === 'ref') { eval('variableNoDeclarada123'); }
+    else if (sel === 'div') { if (true) throw new Error('División por cero'); }
+    else if (sel === 'valid') throw new ValidationError('email', 'El campo email no puede estar vacío');
+  } catch(e) {
+    outErr.style.display = 'block';
+    outErr.textContent = `CAPTURADO en catch:\n  name:    ${e.name}\n  message: ${e.message}${e.campo ? '\n  campo:   ' + e.campo : ''}`;
+    outOk.style.display = 'block';
+    outOk.textContent = 'finally: el programa continúa ejecutándose normalmente ✓';
+  }
+}
+</script>
+
+    <div style="margin-top:.75rem">
+      <div class="code-block"><span class="cm">// ── Traversal del árbol DOM ──</span>
+document.documentElement   <span class="cm">// &lt;html&gt;</span>
+document.head              <span class="cm">// &lt;head&gt;</span>
+document.body              <span class="cm">// &lt;body&gt;</span>
+
+el.parentNode              <span class="cm">// nodo padre</span>
+el.children                <span class="cm">// hijos (HTMLCollection)</span>
+el.firstElementChild       <span class="cm">// primer hijo elemento</span>
+el.lastElementChild        <span class="cm">// último hijo elemento</span>
+el.nextElementSibling      <span class="cm">// hermano siguiente</span>
+el.previousElementSibling  <span class="cm">// hermano anterior</span>
+el.childNodes              <span class="cm">// todos los nodos hijo (incluye texto)</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. BOM -->
+<section id="s6">
+  <div class="sec-header"><span class="badge">06</span><h2>BOM — Browser Object Model</h2></div>
+  <div class="sec-body">
+    <p class="section-note">El BOM permite interactuar con el navegador más allá del documento. El objeto global es <code>window</code>, que contiene objetos como <code>navigator</code>, <code>location</code>, <code>history</code>, <code>screen</code> y métodos de tiempo.</p>
+    <div class="cols">
+      <div>
+        <div class="code-block"><span class="cm">// ── window ──</span>
+window.<span class="fn">alert</span>(<span class="str">"Mensaje"</span>);
+window.<span class="fn">confirm</span>(<span class="str">"¿Continuar?"</span>);  <span class="cm">// bool</span>
+window.<span class="fn">prompt</span>(<span class="str">"Nombre:"</span>);         <span class="cm">// string</span>
+window.innerWidth;   <span class="cm">// ancho viewport</span>
+window.innerHeight;  <span class="cm">// alto viewport</span>
+
+<span class="cm">// ── location ──</span>
+location.href;       <span class="cm">// URL completa</span>
+location.hostname;   <span class="cm">// dominio</span>
+location.pathname;   <span class="cm">// ruta</span>
+location.search;     <span class="cm">// query string ?a=1</span>
+location.<span class="fn">reload</span>();   <span class="cm">// recargar página</span>
+location.href <span class="op">=</span> <span class="str">"https://..."</span>;
+
+<span class="cm">// ── history ──</span>
+history.<span class="fn">back</span>();
+history.<span class="fn">forward</span>();
+history.<span class="fn">go</span>(<span class="op">-</span><span class="num">2</span>);  <span class="cm">// 2 páginas atrás</span>
+
+<span class="cm">// ── navigator ──</span>
+navigator.userAgent;
+navigator.language;
+navigator.onLine;</div>
+      </div>
+      <div>
+        <div class="code-block"><span class="cm">// ── Timers ──</span>
+
+<span class="cm">// setTimeout: ejecutar una vez</span>
+<span class="kw">const</span> t1 <span class="op">=</span> <span class="fn">setTimeout</span>(() <span class="op">=></span> {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"Pasaron 2 segundos"</span>);
+}, <span class="num">2000</span>);
+<span class="fn">clearTimeout</span>(t1);  <span class="cm">// cancelar</span>
+
+<span class="cm">// setInterval: repetir cada N ms</span>
+<span class="kw">let</span> count <span class="op">=</span> <span class="num">0</span>;
+<span class="kw">const</span> t2 <span class="op">=</span> <span class="fn">setInterval</span>(() <span class="op">=></span> {
+  count<span class="op">++</span>;
+  <span class="kw">if</span> (count <span class="op">>=</span> <span class="num">5</span>) <span class="fn">clearInterval</span>(t2);
+}, <span class="num">1000</span>);
+
+<span class="cm">// requestAnimationFrame (animaciones)</span>
+<span class="kw">function</span> <span class="fn">animar</span>(ts) {
+  <span class="cm">// lógica de animación</span>
+  <span class="fn">requestAnimationFrame</span>(animar);
+}
